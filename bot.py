@@ -1,10 +1,7 @@
 import requests
 import urllib.request
 import facesdetector
-from PIL import Image
-from PIL import ImageFont
-from PIL import ImageDraw
-import textwrap
+import filterer
 class BotHandler:
     def __init__(self, token):
         self.token = token
@@ -50,7 +47,7 @@ class BotHandler:
         print(resp)
         return resp'''
     def send_photo(self, chat_id, path):
-        #url = 'https://api.telegram.org/bot450759089:AAFJpNhJqVJEgKKPNh0pmUjv5-M4Pr5W5-A/sendPhoto?chat_id=173827494'
+
         files = {'photo': open(path, 'rb')}
         method = 'sendPhoto'
         params = {'chat_id': chat_id}
@@ -76,8 +73,9 @@ class BotHandler:
 
         return last_update
 
-automator = BotHandler('477713874:AAHDomOo9hEYOvuMi6uz2LkOfy7BJcQgzDo')
+automator = BotHandler('')
 facedetector = facesdetector.FaceDetector()
+filterer = filterer.Filterer()
 def main():
     #drawer()
     #automator.download_file(last_update['message']['photo'][3]['file_path'])
@@ -137,27 +135,77 @@ def main():
                                 last_photo_id = last_update['message']['photo'][0]['file_id']
                     automator.download_file(last_photo_id)
                     currentmode = 1
-                    ### HERE WE DO SOME SHIT WITH IMAGE THEN RETURN ###
                 print('last if')
                 if (last_chat_text.lower() != temp if currentmode == 0 else last_photo_id != temp):
-                    facedetector.replacefaces('file.jpg')
-                    automator.send_photo(last_chat_id, 'result.png')
-                    new_offset = last_update_id + 1
-                    continue
-                    #break
-                    '''
                     while True:
-                        automator.get_updates(new_offset)
-                        last_update = automator.get_last_update()
-                        last_update_id = last_update['update_id']
-                        last_chat_text = last_update['message']['text']
-                        last_chat_id = last_update['message']['chat']['id']
-                        last_photo_id = last_update['message']['photo']['file_id']
-                        break
-                    '''
+                        automator.send_message(last_chat_id, 'What do we do? \n 1 - oldPhoto \n 2 - frescoOnTheChromaKey \n 3 - demonInConsole \n 4 - lemonParadise \n 5 - deepInPurple \n 6 - aquarium \n 7 - tonedCar \n 8 - roboPainter \n 3 - indigo')
+                        while True:
+                            try:
+                                last_update = automator.get_last_update()
+                                #print('')
+                                last_update_id = last_update['update_id']
+                                last_chat_text = last_update['message']['text']
+                                choose = last_chat_text
+                                last_chat_id = last_update['message']['chat']['id']
+                                #if last_chat_text != temp:
+                                facedetector.replacefaces('file.jpg')
+                                print('\n Choose: ' + choose)
+                                if choose == '0':
+                                    imgtosend = filterer.freq_colorize('result.png')
+                                if choose == '1':
+                                    imgtosend = filterer.oldPhoto('result.png')
+                                if choose == '2':
+                                    imgtosend = filterer.frescoOnTheChromaKey('result.png')
+                                if choose == '3':
+                                    imgtosend = filterer.demonInConsole('result.png')
+                                if choose == '4':
+                                    imgtosend = filterer.lemonParadise('result.png')
+                                if choose == '5':
+                                    imgtosend = filterer.deepInPurple('result.png')
+                                if choose == '6':
+                                    imgtosend = filterer.aquarium('result.png')
+                                if choose == '7':
+                                    imgtosend = filterer.tonedCar('result.png')
+                                if choose == '8':
+                                    imgtosend = filterer.roboPainter('result.png')
+                                if choose == '9':
+                                    imgtosend = filterer.indigo('result.png')
+                                #imgtosend = filterer.indigo('result.png')
+                                imgtosend.save('result1.png')
+                                #automator.send_photo(last_chat_id, 'result.png')
+                                automator.send_photo(last_chat_id, 'result1.png')
+                                #new_offset = last_update_id + 1
+                                #automator.get_updates(new_offset)
+                                new_offset = last_update_id + 1
+                                automator.get_updates(new_offset)
+                                print("cnt1")
+                                return 0
+                                #continue
+                            except:
+                                continue
+                            continue
+                        #continue
+                    #continue
+                    #break
+                    return 0
                 else:
                     new_offset = last_update_id + 1
-                    continue
-        new_offset = last_update_id + 1
-     #print('some fatal error over here')
-main()
+                    print("cnt2")
+                    #return 0
+                    continue#∆
+                print("return")
+                return 0  # ∆ ∆
+        new_offset = last_update_id + 1#∆
+                                       #∆∆
+     #åå∂˙®˚®˚ƒµ∂∆∂ß√´ƒ∂∆´
+
+def robust_main():
+    try:
+        while True:
+            main()
+    except:
+            robust_main()
+
+#robust_main()
+#while True:
+robust_main()
